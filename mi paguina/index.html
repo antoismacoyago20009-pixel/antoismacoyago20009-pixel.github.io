@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#09090b">
+
+    <title>Anthony Toapanta | Personal Collection</title>
+
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+
+    <header>
+        <div class="logo">AT<span>.</span></div>
+        <p>PERSONAL COLLECTION</p>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- PERFIL PERSONAL -->
+
+        <section class="perfil" id="perfil">
+
+            <img src="fotos/perfil.jpg.jpeg"
+                 class="foto-perfil"
+                 alt="Foto de perfil">
+
+            <h1>Anthony Toapanta</h1>
+
+            <span class="categoria">
+                PERSONAL PROFILE
+            </span>
+
+            <p class="biografia">
+                La vida está hecha de momentos
+                que merecen ser recordados.
+                Esta es mi historia en fotografías.
+            </p>
+
+            <div class="estadisticas">
+
+                <div>
+                    <strong>53</strong>
+                    <p>Fotografías</p>
+                </div>
+
+                <div>
+                    <strong>01</strong>
+                    <p>Historia</p>
+                </div>
+
+                <div>
+                    <strong>∞</strong>
+                    <p>Recuerdos</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- GALERÍA PERSONAL -->
+
+        <section class="galeria" id="galeria">
+
+            <div class="titulo-galeria">
+
+                <div>
+                    <p>MEMORIAS PERSONALES</p>
+                    <h2>Mi colección</h2>
+                </div>
+
+                <span>53 fotografías</span>
+
+            </div>
+
+            <div class="fotos" id="fotos"></div>
+
+        </section>
+
+        <!-- PIE DE PÁGINA -->
+
+        <footer>
+
+            <h3>AT.</h3>
+
+            <p>Mi vida, mi historia, mis recuerdos.</p>
+
+            <span>© 2026 Anthony Toapanta</span>
+
+        </footer>
+
+    </main>
+
+    <!-- MENÚ INFERIOR -->
+
+    <nav class="menu-inferior">
+
+        <a href="#perfil">
+
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 22v-3a8 8 0 0 1 16 0v3"/>
+            </svg>
+
+            Perfil
+
+        </a>
+
+        <a href="#galeria">
+
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+            </svg>
+
+            Galería
+
+        </a>
+
+    </nav>
+
+    <!-- VISOR A PANTALLA COMPLETA -->
+
+    <dialog class="visor" id="visor" aria-label="Visor de fotografías">
+
+        <div class="barra-visor">
+
+            <span id="contador">1 / 53</span>
+
+            <button id="cerrar" aria-label="Cerrar">
+                &times;
+            </button>
+
+        </div>
+
+        <button class="anterior" id="anterior"
+                aria-label="Fotografía anterior">
+            &#10094;
+        </button>
+
+        <img id="imagen-grande"
+             alt="Fotografía ampliada">
+
+        <button class="siguiente" id="siguiente"
+                aria-label="Fotografía siguiente">
+            &#10095;
+        </button>
+
+        <div class="pie-visor">
+            Desliza para cambiar de fotografía
+        </div>
+
+    </dialog>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        const totalFotos = 53;
+
+        const galeria = document.getElementById("fotos");
+        const visor = document.getElementById("visor");
+        const imagenGrande = document.getElementById("imagen-grande");
+        const contador = document.getElementById("contador");
+
+        let fotoActual = 1;
+
+        // GENERAR LAS 53 FOTOGRAFÍAS
+
+        for (let i = 1; i <= totalFotos; i++) {
+
+            const boton = document.createElement("button");
+
+            boton.className = "foto";
+
+            boton.setAttribute(
+                "aria-label", "Abrir fotografía " + i
+            );
+
+            const imagen = document.createElement("img");
+
+            imagen.src = "fotos/foto" + i + ".jpeg";
+            imagen.alt = "Fotografía " + i;
+            imagen.loading = "lazy";
+            imagen.decoding = "async";
+
+            boton.appendChild(imagen);
+            galeria.appendChild(boton);
+
+            boton.addEventListener("click", function () {
+
+                abrirFoto(i);
+
+            });
+
+        }
+
+        // ABRIR FOTOGRAFÍA
+
+        function abrirFoto(numero) {
+
+            fotoActual = numero;
+
+            mostrarFoto();
+
+            if (!visor.open) {
+                visor.showModal();
+            }
+
+            document.body.style.overflow = "hidden";
+
+        }
+
+        // MOSTRAR FOTOGRAFÍA
+
+        function mostrarFoto() {
+
+            imagenGrande.src =
+                "fotos/foto" + fotoActual + ".jpg";
+
+            imagenGrande.alt =
+                "Fotografía " + fotoActual;
+
+            contador.textContent =
+                fotoActual + " / " + totalFotos;
+
+        }
+
+        // SIGUIENTE FOTOGRAFÍA
+
+        function siguienteFoto() {
+
+            fotoActual++;
+
+            if (fotoActual > totalFotos) {
+                fotoActual = 1;
+            }
+
+            mostrarFoto();
+
+        }
+
+        // FOTOGRAFÍA ANTERIOR
+
+        function anteriorFoto() {
+
+            fotoActual--;
+
+            if (fotoActual < 1) {
+                fotoActual = totalFotos;
+            }
+
+            mostrarFoto();
+
+        }
+
+        // CERRAR FOTOGRAFÍA
+
+        function cerrarFoto() {
+
+            visor.close();
+
+        }
+
+        visor.addEventListener("close", function () {
+
+            document.body.style.overflow = "";
+
+        });
+
+        // BOTONES DEL VISOR
+
+        document.getElementById("cerrar")
+            .addEventListener("click", cerrarFoto);
+
+        document.getElementById("siguiente")
+            .addEventListener("click", siguienteFoto);
+
+        document.getElementById("anterior")
+            .addEventListener("click", anteriorFoto);
+
+        // DESLIZAR CON EL DEDO
+
+        let inicioX = 0;
+        let inicioY = 0;
+        let deslizando = false;
+
+        imagenGrande.addEventListener("touchstart", function (e) {
+
+            deslizando = e.touches.length === 1;
+
+            if (!deslizando) return;
+
+            inicioX = e.touches[0].clientX;
+            inicioY = e.touches[0].clientY;
+
+        }, { passive: true });
+
+        imagenGrande.addEventListener("touchcancel", function () {
+
+            deslizando = false;
+
+        });
+
+        imagenGrande.addEventListener("touchend", function (e) {
+
+            if (!deslizando) return;
+
+            deslizando = false;
+
+            const finalX = e.changedTouches[0].clientX;
+            const finalY = e.changedTouches[0].clientY;
+
+            const distanciaX = inicioX - finalX;
+            const distanciaY = inicioY - finalY;
+
+            if (Math.abs(distanciaX) > 50 &&
+                Math.abs(distanciaX) > Math.abs(distanciaY)) {
+
+                if (distanciaX > 0) {
+
+                    siguienteFoto();
+
+                } else {
+
+                    anteriorFoto();
+
+                }
+
+            }
+
+        }, { passive: true });
+
+        // CONTROLES PARA COMPUTADORA
+
+        document.addEventListener("keydown", function (e) {
+
+            if (!visor.open) return;
+
+            if (e.key === "ArrowRight") {
+                siguienteFoto();
+            }
+
+            if (e.key === "ArrowLeft") {
+                anteriorFoto();
+            }
+
+            if (e.key === "Escape") {
+                e.preventDefault();
+                cerrarFoto();
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
